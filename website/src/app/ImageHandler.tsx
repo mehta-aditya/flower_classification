@@ -39,32 +39,15 @@ const ImageHandler: React.FC<imageHandlerProps> = (props: imageHandlerProps) => 
 
       const predictions = model.predict(input.reshape([1, 128, 128, 3])) as tf.Tensor;
       const results = await predictions.array() as number[][];
-      console.log(results);
       const sortedResults: Prediction[] = results[0]
         .map((result, index) => ({ class: props.classes[index], percentage: result }))
         .sort((a, b) => b.percentage - a.percentage);
-
       setNetworkPrediction(sortedResults.slice(0,1));
     }
   };
 
   return (
     <>
-    {!imageURL && (
-      <h2 className="text-center text-xl text-pink-500">      
-      Aster,
-      Daisy,
-      Iris,
-      Lavender,
-      Lily,
-      Marigold,
-      Orchid,
-      Poppy,
-      Rose,
-      Sunflower
-      </h2>
-    )}
-
     <div className="flex flex-col items-center py-12">
       <FileUploader
         handleChange={handleChange}
