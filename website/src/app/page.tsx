@@ -1,19 +1,6 @@
 import React, { useState, useEffect} from "react";
 import ImageHandler from './ImageHandler';
 
-const classes: string[] = [
-  "Aster",
-  "Daisy",
-  "Iris",
-  "Lavender",
-  "Lily",
-  "Marigold",
-  "Orchid",
-  "Poppy",
-  "Rose",
-  "Sunflower",
-];
-
 export default function Home() {
   return (
     <div>
@@ -31,7 +18,7 @@ export default function Home() {
       Rose,
       Sunflower
       </h2>
-      <ImageHandler modelPath="/model/model.json" classes={classes}/>
+      <ImageHandler modelPath="/model/model.json"/>
     </div>
   )
 }

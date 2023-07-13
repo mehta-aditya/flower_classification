@@ -3,17 +3,17 @@ import React, { useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { FileUploader } from "react-drag-drop-files";
 import Image from "next/image";
+import InfoCard from "./InfoCard";
 
 interface Prediction {
-  class: string;
   percentage: number;
+  index: number;
 }
 
 const fileTypes = ["JPG", "PNG", "JPEG", "HEIC"];
 
 interface imageHandlerProps {
   modelPath: string;
-  classes: string[];
 };
 
 const ImageHandler: React.FC<imageHandlerProps> = (props: imageHandlerProps) => {
@@ -40,7 +40,7 @@ const ImageHandler: React.FC<imageHandlerProps> = (props: imageHandlerProps) => 
       const predictions = model.predict(input.reshape([1, 128, 128, 3])) as tf.Tensor;
       const results = await predictions.array() as number[][];
       const sortedResults: Prediction[] = results[0]
-        .map((result, index) => ({ class: props.classes[index], percentage: result }))
+        .map((result, index) => ({ percentage: result, index:index }))
         .sort((a, b) => b.percentage - a.percentage);
       setNetworkPrediction(sortedResults.slice(0,1));
     }
@@ -48,7 +48,7 @@ const ImageHandler: React.FC<imageHandlerProps> = (props: imageHandlerProps) => 
 
   return (
     <>
-    <div className="flex flex-col items-center py-12">
+    <div className="flex flex-col items-center pt-6">
       <FileUploader
         handleChange={handleChange}
         name="file"
@@ -72,13 +72,7 @@ const ImageHandler: React.FC<imageHandlerProps> = (props: imageHandlerProps) => 
       </button>
 
       {networkPrediction.length > 0 && (
-
-        <div className="bg-pink-700 p-3 rounded shadow mt-3">
-          <h2 className="text-xl text-white font-bold mb-2">{networkPrediction[0].class}</h2>
-          {/* <p className="text-lg">{(prediction.percentage * 100).toFixed(2)}%</p> */}
-        </div>
-
-
+        <InfoCard index={networkPrediction[0].index}/>
       )}
     </div>
     </>
